@@ -1,4 +1,4 @@
-[
+export const avatarDatas = [
   {
     "name": "Sogang_Character1",
     "author": "Yangho",

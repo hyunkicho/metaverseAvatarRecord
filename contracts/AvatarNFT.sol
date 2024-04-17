@@ -13,19 +13,24 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 contract AvatarNFT is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnable, Ownable {
     uint256 private _nextTokenId;
     mapping (uint256 => bytes32) registerdHash;
-    constructor(address initialOwner)
+    constructor()
         ERC721("AvatarNFT", "AVT")
-        Ownable(initialOwner)
+        Ownable(msg.sender)
     {}
 
-    function saveHashData(bytes32 hashData) public onlyOwner{
-
+    function saveHashData(bytes32 hashData, uint256 tokenId) public onlyOwner{
+        registerdHash[tokenId] = hashData;
     }
 
-    function safeMint(address to, string memory uri) public onlyOwner {
+    function getHashData(uint256 tokenId) public view returns (bytes32) {
+        return registerdHash[tokenId];
+    }
+
+    function safeMint(address to, bytes32 hashData) public onlyOwner {
         uint256 tokenId = _nextTokenId++;
         _safeMint(to, tokenId);
-        _setTokenURI(tokenId, uri);
+        _setTokenURI(tokenId, tokenURI(tokenId));
+        saveHashData(hashData, tokenId);
     }
 
     // The following functions are overrides required by Solidity.
@@ -45,17 +50,7 @@ contract AvatarNFT is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnable
         super._increaseBalance(account, value);
     }
 
-    // function tokenURI(uint256 tokenId)
-    //     public
-    //     view
-    //     override(ERC721, ERC721URIStorage)
-    //     returns (string memory)
-    // {
-    //     return super.tokenURI(tokenId);
-    // }
-
     function tokenURI(uint256 tokenId) public view override(ERC721, ERC721URIStorage) returns (string memory) {
-        require(super._exists(tokenId), "Token with this id doesn't exist");
         return string(
             abi.encodePacked(
                 'data:application/json;base64,',
@@ -67,7 +62,9 @@ contract AvatarNFT is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnable
                                 Strings.toString(tokenId),
                                 '",',
                                 '"Url":"',
-                                'https://raw.githubusercontent.com/oasysgames/dino-runner-client/blob/main/src/assets/images/dinos/pixelDinoMonochromeSingleFrame.png',
+                                'https://raw.githubusercontent.com/hyunkicho/metaverseAvatarRecord/main/nftData/PlayerInfoData',
+                                Strings.toString(tokenId),
+                                '.json'
                             '"}'
                         )
                     )
