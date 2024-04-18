@@ -10,7 +10,8 @@ import { token } from "../typechain-types/@openzeppelin/contracts";
 import fetch from 'node-fetch';
 import exp from "constants";
 import { avatarDatas } from "./AvatarDatas";
-
+const fs = require('fs');
+const path = require('path');
 
 describe("Testing Avatar data NFT", function () {
   async function deployNFTFixture() {
@@ -95,9 +96,21 @@ describe("Testing Avatar data NFT", function () {
       /** Step01) put hash of avatar data and mint NFT
        * */
 
+      const readJsonFile = (filePath: string) => {
+        try {
+          const fileContent = fs.readFileSync(filePath, 'utf-8');
+          return JSON.parse(fileContent);
+        } catch (error) {
+          console.error(`Error reading file ${filePath}: `, error);
+          return null; // Return null to indicate failure
+        }
+      };
+
       for(let i =0; i<501; i++) {
         console.log("1️⃣ put hash of avatar data and mint NFT")
-        const exData = avatarDatas[i];
+        const rootDir = __dirname;
+        const filePath = path.join(rootDir, `../nftData/PlayerInfoData${i}.json`);
+        const exData = readJsonFile(filePath);
         const serializedData = JSON.stringify(exData);
         const exDataHash = ethers.keccak256(ethers.toUtf8Bytes(serializedData));
         console.log("✅exDataHash >>", exDataHash);
@@ -120,7 +133,7 @@ describe("Testing Avatar data NFT", function () {
         // console.log("decodedJsonString >>", decodedJsonString);
         const jsonObj = JSON.parse(decodedJsonString);
         // console.log("get avatar name >>", jsonObj.name);
-        console.log("get url name >>", jsonObj.Url);
+        // console.log("get url name >>", jsonObj.Url);
   
         const hashData = await avtNFT.getHashData(i);
         console.log("✅hashData >>", hashData);
@@ -140,6 +153,11 @@ describe("Testing Avatar data NFT", function () {
               console.error('Failed to fetch NFT data:', error);
           }
         const recoverSerializedData = JSON.stringify(data);
+        console.log(serializedData)
+        console.log(recoverSerializedData)
+        expect(serializedData).to.equal(recoverSerializedData);
+        console.log("✅ compare avatar data success");
+
         const recoverExDataHash = ethers.keccak256(ethers.toUtf8Bytes(recoverSerializedData));
   
         expect(recoverExDataHash).to.equal(exDataHash);
