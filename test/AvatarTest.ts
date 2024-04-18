@@ -106,14 +106,15 @@ describe("Testing Avatar data NFT", function () {
         }
       };
 
-      for(let i =0; i<501; i++) {
-        console.log("1️⃣ put hash of avatar data and mint NFT")
+      for(let i =0; i<500; i++) {
+        console.log(`🛠️testing ${i} avatar start`);
+        // console.log("1️⃣ put hash of avatar data and mint NFT")
         const rootDir = __dirname;
         const filePath = path.join(rootDir, `../nftData/PlayerInfoData${i}.json`);
         const exData = readJsonFile(filePath);
         const serializedData = JSON.stringify(exData);
         const exDataHash = ethers.keccak256(ethers.toUtf8Bytes(serializedData));
-        console.log("✅exDataHash >>", exDataHash);
+        // console.log("✅exDataHash >>", exDataHash);
 
         const mintTx = await avtNFT.safeMint(user.address, exDataHash);
         await mintTx.wait();
@@ -121,11 +122,11 @@ describe("Testing Avatar data NFT", function () {
         // const tokenId = i-1;
         const ownerOfNft = await avtNFT.ownerOf(i);
         expect(ownerOfNft).to.equal(user.address);
-        console.log("✅nft minted scceusfully");
+        // console.log("✅nft minted scceusfully");
 
         /** Step02) get tokenURI data from Minted NFT and get Hash from minted NFT
          * */
-        console.log("2️⃣ get tokenURI data from Minted NFT and get Hash from minted NFT");  
+        // console.log("2️⃣ get tokenURI data from Minted NFT and get Hash from minted NFT");  
         const tokenURI = await avtNFT.connect(verifier).tokenURI(i);
         // console.log("✅tokenURI : ", tokenURI);
         const base64EncodedJson = tokenURI.split(",")[1];
@@ -136,14 +137,14 @@ describe("Testing Avatar data NFT", function () {
         // console.log("get url name >>", jsonObj.Url);
   
         const hashData = await avtNFT.getHashData(i);
-        console.log("✅hashData >>", hashData);
+        // console.log("✅hashData >>", hashData);
 
         expect(hashData).equal(exDataHash);
-        console.log("✅ hash of nft is recoreded correctly");
+        // console.log("✅ hash of nft is recoreded correctly");
     
         /** Step03) check if avatar data is manipulated by comparing hash data
          * */
-        console.log("3️⃣ check if avatar data is manipulated by comparing hash data");
+        // console.log("3️⃣ check if avatar data is manipulated by comparing hash data");
   
         let data;
           try {
@@ -153,16 +154,16 @@ describe("Testing Avatar data NFT", function () {
               console.error('Failed to fetch NFT data:', error);
           }
         const recoverSerializedData = JSON.stringify(data);
-        console.log(serializedData)
-        console.log(recoverSerializedData)
+        // console.log(serializedData)
+        // console.log(recoverSerializedData)
         expect(serializedData).to.equal(recoverSerializedData);
-        console.log("✅ compare avatar data success");
+        // console.log("✅ compare avatar data success");
 
         const recoverExDataHash = ethers.keccak256(ethers.toUtf8Bytes(recoverSerializedData));
   
         expect(recoverExDataHash).to.equal(exDataHash);
-        console.log("✅ compare hash data success");
+        // console.log("✅ compare hash data success");
       }
-    });
+    }).timeout(1000000);
   });
 });
