@@ -3,11 +3,10 @@
 
 
 # flow
-1. upload avatar data to Storage (sotrage URI is in nftData directory in this project
-)
+1. upload avatar data to Storage (sotrage URI is in nftData directory in this project)
 2. push hash data and mint NFT with tokenURI match to avatar data
 3. anyone can check when avatar is created and if avatar data is manipulated by User.
-4. We analyzed several standards and experimented with 500 avatars generated against the avatar standard data presented in the paper, and after uploading them to a centralized repository and comparing the hashes, we confirmed that the implementation is feasible without a significant increase in gas costs.
+4. We analyzed several standards and experimented with 1000 avatars generated against the avatar standard data presented in the paper which is extracted from mixamo character, and after uploading them to a centralized repository and comparing the hashes, we confirmed that the implementation is feasible without a significant increase in gas costs.
 
 # test
 ```
