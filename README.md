@@ -7,6 +7,7 @@
 )
 2. push hash data and mint NFT with tokenURI match to avatar data
 3. anyone can check when avatar is created and if avatar data is manipulated by User.
+4. We analyzed several standards and experimented with 500 avatars generated against the avatar standard data presented in the paper, and after uploading them to a centralized repository and comparing the hashes, we confirmed that the implementation is feasible without a significant increase in gas costs.
 
 # test
 ```
