@@ -106,7 +106,7 @@ describe("Testing Avatar data NFT", function () {
         }
       };
 
-      for(let i =0; i<500; i++) {
+      for(let i =0; i<1000; i++) {
         console.log(`🛠️testing ${i} avatar start`);
         // console.log("1️⃣ put hash of avatar data and mint NFT")
         const rootDir = __dirname;
